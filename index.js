@@ -16,8 +16,14 @@ app.get('/pets', async (req, res) => {
 });
 app.post('/pets', async (req, res) => {
     const {name, age, color, species} = req.body;
-    await pets.create(name, age, color, species);
-    res.json({message: `${name} is created.`});
+    try {
+        await pets.create(name, age, color, species);
+        res.json({message: `${name} is created.`});
+    } catch(err) {
+        console.error(err)
+        res.status(403);
+        res.json({message: `${name} failed.`});
+    }
 });
 app.put('/pets/:name', async (req, res) => {
     // TODO: take name parameter from the route and update with given values in the body.
